@@ -3,7 +3,6 @@ package testsetup_test
 import (
 	"context"
 	"github.com/segmentio/kafka-go"
-	"os"
 	"sync"
 	"testing"
 	"time"
@@ -19,12 +18,6 @@ import (
 
 func TestTestSetup_Start(t *testing.T) {
 	networkID := "TestTestSetup_Start-" + uuid.New().String()
-	auth := docker.AuthConfiguration{
-		Username:      os.Getenv("CI_REGISTRY_USER"),
-		Password:      os.Getenv("CI_REGISTRY_PASSWORD"),
-		Email:         os.Getenv("CI_REGISTRY_EMAIL"),
-		ServerAddress: os.Getenv("CI_REGISTRY"),
-	}
 	postgresContainerName := "postgres-" + uuid.New().String()
 	postgres := container.PostgresContainerOpts{
 		ContainerName:  postgresContainerName,
@@ -54,12 +47,11 @@ func TestTestSetup_Start(t *testing.T) {
 		ZookeeperPort:     zookeeper.Port,
 		NetworkID:         networkID,
 	}
-	testSetup := testsetup.NewTestSetup(auth,
+	testSetup := testsetup.NewTestSetup(docker.AuthConfiguration{},
 		networkID,
 		container.WithPostgres(postgres),
 		container.WithZookeeper(zookeeper),
-		container.WithKafka(kafkaContainerOpts, "hetzner.cloud.network.v1.changes",
-			"hetzner.cloud.network.v1.changes.reply"))
+		container.WithKafka(kafkaContainerOpts, "your.topic.1", "your.topic.2"))
 	testSetup.Start()
 	err := testSetup.WaitUntilStarted()
 	require.NoError(t, err)
@@ -78,7 +70,7 @@ func TestTestSetup_Start(t *testing.T) {
 	kafkaContainerOpts.ZookeeperHostName = zookeeper.ContainerName
 	kafkaContainerOpts.ZookeeperPort = zookeeper.Port
 
-	testSetup2 := testsetup.NewTestSetup(auth,
+	testSetup2 := testsetup.NewTestSetup(docker.AuthConfiguration{},
 		networkID2,
 		container.WithPostgres(postgres),
 		container.WithZookeeper(zookeeper),
