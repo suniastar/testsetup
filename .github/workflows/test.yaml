@@ -1,0 +1,20 @@
+name: Tests
+
+on: push
+
+jobs:
+  tests:
+    name: Tests
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v2
+      - uses: actions/setup-go@v4
+        name: Setup Go
+        with:
+          go-version: '>=1.21.0'
+      - name: Install dependencies
+        run: go install github.com/vektra/mockery/v2@v2.36.1
+      - name: Prepare tests
+        run: go mod download && go generate ./...
+      - name: Run tests
+        run: go test ./...
