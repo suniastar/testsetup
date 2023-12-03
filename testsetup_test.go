@@ -74,8 +74,7 @@ func TestTestSetup_Start(t *testing.T) {
 		networkID2,
 		container.WithPostgres(postgres),
 		container.WithZookeeper(zookeeper),
-		container.WithKafka(kafkaContainerOpts, "hetzner.cloud.network.v1.changes",
-			"hetzner.cloud.network.v1.changes.reply"))
+		container.WithKafka(kafkaContainerOpts, "your.topic.1", "your.topic.2"))
 	testSetup2.Start()
 	err = testSetup2.WaitUntilStarted()
 	require.NoError(t, err)
@@ -83,11 +82,11 @@ func TestTestSetup_Start(t *testing.T) {
 	// Try connecting to both of them.
 	reader1 := kafka.NewReader(kafka.ReaderConfig{
 		Brokers: []string{container.AutoGuessHostname() + ":9092"},
-		Topic:   "hetzner.cloud.network.v1.changes",
+		Topic:   "your.topic.1",
 	})
 	reader2 := kafka.NewReader(kafka.ReaderConfig{
 		Brokers: []string{container.AutoGuessHostname() + ":9093"},
-		Topic:   "hetzner.cloud.network.v1.changes",
+		Topic:   "your.topic.2",
 	})
 
 	ctxWithDeadline, cancel := context.WithTimeout(context.Background(), time.Second*30)
@@ -109,13 +108,13 @@ func TestTestSetup_Start(t *testing.T) {
 
 	writer1 := kafka.NewWriter(kafka.WriterConfig{
 		Brokers:      []string{container.AutoGuessHostname() + ":9092"},
-		Topic:        "hetzner.cloud.network.v1.changes",
+		Topic:        "your.topic.1",
 		BatchSize:    1,
 		BatchTimeout: time.Millisecond * 5,
 	})
 	writer2 := kafka.NewWriter(kafka.WriterConfig{
 		Brokers:      []string{container.AutoGuessHostname() + ":9093"},
-		Topic:        "hetzner.cloud.network.v1.changes",
+		Topic:        "your.topic.2",
 		BatchSize:    1,
 		BatchTimeout: time.Millisecond * 5,
 	})
