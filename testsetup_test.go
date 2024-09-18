@@ -7,13 +7,13 @@ import (
 	"testing"
 	"time"
 
-	"github.com/4ND3R50N/testsetup"
-	"github.com/4ND3R50N/testsetup/container"
 	"github.com/google/uuid"
 	"github.com/ory/dockertest"
 	"github.com/ory/dockertest/docker"
 	"github.com/stretchr/testify/assert"
 	"github.com/stretchr/testify/require"
+	"github.com/suniastar/testsetup"
+	"github.com/suniastar/testsetup/container"
 )
 
 func TestTestSetup_Start(t *testing.T) {

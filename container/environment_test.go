@@ -4,9 +4,9 @@ import (
 	"os"
 	"testing"
 
-	"github.com/4ND3R50N/testsetup/container"
 	"github.com/stretchr/testify/assert"
 	"github.com/stretchr/testify/require"
+	"github.com/suniastar/testsetup/container"
 )
 
 func TestAutoGuessHostname(t *testing.T) {

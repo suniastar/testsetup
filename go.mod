@@ -1,4 +1,4 @@
-module github.com/4ND3R50N/testsetup
+module github.com/suniastar/testsetup
 
 go 1.21.0
 

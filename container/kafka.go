@@ -5,10 +5,10 @@ import (
 
 	"strconv"
 
-	"github.com/4ND3R50N/testsetup"
 	"github.com/ory/dockertest"
 	"github.com/ory/dockertest/docker"
 	kafkaClient "github.com/segmentio/kafka-go"
+	"github.com/suniastar/testsetup"
 )
 
 type kafka struct {

@@ -1,10 +1,11 @@
 package container
 
 import (
-	"github.com/4ND3R50N/testsetup"
+	"strconv"
+
 	"github.com/ory/dockertest"
 	"github.com/ory/dockertest/docker"
-	"strconv"
+	"github.com/suniastar/testsetup"
 )
 
 type supabasePostgres struct {
