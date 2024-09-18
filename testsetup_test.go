@@ -30,6 +30,17 @@ func TestTestSetup_Start(t *testing.T) {
 		DBInternalPort: "5432",
 	}
 
+	supabasePostgresContainerName := "supabase-" + uuid.New().String()
+	supabasePostgres := container.SupabasePostgresContainerOpts{
+		ContainerName:  supabasePostgresContainerName,
+		NetworkID:      networkID,
+		DBName:         "test",
+		DBPass:         "test",
+		ExternalDBHost: container.AutoGuessHostname(),
+		DBExternalPort: "54321",
+		DBInternalPort: "5432",
+	}
+
 	zookeeperContainerName := "zookeeper-" + uuid.New().String()
 	zookeeper := container.ZookeeperOpts{
 		ContainerName: zookeeperContainerName,
@@ -50,6 +61,7 @@ func TestTestSetup_Start(t *testing.T) {
 	testSetup := testsetup.NewTestSetup(docker.AuthConfiguration{},
 		networkID,
 		container.WithPostgres(postgres),
+		container.WithSupabasePostgres(supabasePostgres),
 		container.WithZookeeper(zookeeper),
 		container.WithKafka(kafkaContainerOpts, "your.topic.1", "your.topic.2"))
 	testSetup.Start()
@@ -60,6 +72,9 @@ func TestTestSetup_Start(t *testing.T) {
 	networkID2 := "TestTestSetup_Start-" + uuid.New().String()
 	postgres.ContainerName = postgresContainerName + "-2"
 	postgres.DBExternalPort = "5433"
+
+	supabasePostgres.ContainerName = supabasePostgresContainerName + "-2"
+	supabasePostgres.DBExternalPort = "54323"
 
 	zookeeper.ContainerName = zookeeperContainerName + "-2"
 	zookeeper.Port = "2182"
@@ -73,6 +88,7 @@ func TestTestSetup_Start(t *testing.T) {
 	testSetup2 := testsetup.NewTestSetup(docker.AuthConfiguration{},
 		networkID2,
 		container.WithPostgres(postgres),
+		container.WithSupabasePostgres(supabasePostgres),
 		container.WithZookeeper(zookeeper),
 		container.WithKafka(kafkaContainerOpts, "your.topic.1", "your.topic.2"))
 	testSetup2.Start()
